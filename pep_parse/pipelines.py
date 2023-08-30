@@ -1,19 +1,20 @@
 import csv
 import datetime as dt
+from collections import defaultdict
 from pathlib import Path
+
+from pep_parse.settings import DATETIME_FORMAT
 
 
 BASE_DIR = Path(__file__).parent.parent
-DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 
 class PepParsePipeline:
     def open_spider(self, spider):
-        self.result = {}
+        self.result = defaultdict(int)
 
     def process_item(self, item, spider):
-        status = item["status"]
-        self.result[status] = self.result.get(status, 0) + 1
+        self.result[item.get('status')] += 1
         return item
 
     def close_spider(self, spider):
